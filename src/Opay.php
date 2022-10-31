@@ -5,6 +5,7 @@ namespace Mimocodes\Payment;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
 use Exception;
+use Mimocodes\Payment\Controllers\PaymentController;
 
 
 class Opay
@@ -17,7 +18,7 @@ class Opay
         }elseif ($mode === 'live'){
             $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create';
         }
-        URL::forceSchema('https');
+        URL::forceScheme('https');
         $data['callbackUrl'] = URL::to('/').'/mimocodes/payment/opay/payment-callback-url';
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
@@ -32,8 +33,8 @@ class Opay
         }
     }
 
-    public function invoiceCallbackResponse(Request $request)
+    public function invoiceCallbackResponse($data)
     {
-
+        return $data;
     }
 }
