@@ -2,6 +2,7 @@
 
 namespace Mimocodes\Payment\Providers;
 
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\ServiceProvider;
 
 class PaymentProvider extends ServiceProvider
@@ -11,5 +12,8 @@ class PaymentProvider extends ServiceProvider
         $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../views','payment');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        Artisan::call('make:model Callback',[
+            '--class' => 'App\Models'
+        ]);
     }
 }
