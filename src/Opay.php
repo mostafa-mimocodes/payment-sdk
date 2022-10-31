@@ -24,7 +24,7 @@ class Opay
             'MerchantId' => $merchantId
         ])->post($url, $data);
         if( $response['code'] == '00000'){
-            return $response;
+            return json_decode($response);
         }else{
             throw new Exception('Something Went Wrong While trying to create cashier link!!');
         }
