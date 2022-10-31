@@ -17,7 +17,8 @@ class Opay
         }elseif ($mode === 'live'){
             $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create';
         }
-        $data['callbackUrl'] = URL::to('/').'mimocodes/payment/opay/payment-callback-url';
+        URL::forceSchema('https');
+        $data['callbackUrl'] = URL::to('/').'/mimocodes/payment/opay/payment-callback-url';
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',

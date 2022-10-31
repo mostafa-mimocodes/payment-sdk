@@ -11,13 +11,13 @@ class PaymentController
 {
     public function callback(Request $request)
     {
-        log::info($request);
+        Log::info($request);
         Log::info("Invoice Callback");
         Log::info("received At");
         Log::info(\Carbon\Carbon::now());
         $data = $request['payload'];
         $hash = $this->get_hmacs($data);
-        log::info($hash);
+        Log::info($hash);
         //sandbox hash is being used for now
         if ($request['sha512'] == $hash[0]) {
             $reference = $data['reference'];
