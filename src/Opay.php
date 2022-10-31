@@ -3,6 +3,7 @@
 namespace Mimocodes\Payment;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\URL;
 use Exception;
 
 
@@ -16,7 +17,7 @@ class Opay
         }elseif ($mode === 'live'){
             $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create';
         }
-
+        $data['callbackUrl'] = URL::to('/').'mimocodes/payment/opay/payment-callback-url';
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
@@ -28,5 +29,10 @@ class Opay
         }else{
             throw new Exception('Something Went Wrong While trying to create cashier link!!');
         }
+    }
+
+    public function invoiceCallbackResponse(Request $request)
+    {
+
     }
 }
