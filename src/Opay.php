@@ -10,7 +10,12 @@ class Opay
 {
     public function createCashier( $data,$publicKey,$merchantId,$mode = 'test')
     {
-        $mode === 'test' ? $url = 'https://sandboxapi.opaycheckout.com/api/v1/international/cashier/create' : $mode === 'live' ? $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create': null;
+
+        if($mode === 'test'){
+            $url = 'https://sandboxapi.opaycheckout.com/api/v1/international/cashier/create';
+        }elseif ($mode === 'live'){
+            $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create';
+        }
 
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
