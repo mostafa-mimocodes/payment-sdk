@@ -1,0 +1,18 @@
+{
+    "name": "mimocodes/payment",
+    "description": "Simple package to provides helper function for your payment gateway.",
+    "autoload": {
+        "psr-4": {
+            "Mimocodes\\Payment\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mostafa Essam",
+            "email": "me8gh210@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0"
+    }
+}
