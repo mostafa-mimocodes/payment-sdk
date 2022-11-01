@@ -18,8 +18,6 @@ class Opay
         }elseif ($mode === 'live'){
             $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create';
         }
-        URL::forceScheme('https');
-        $data['callbackUrl'] = URL::to('/').'/mimocodes/payment/opay/payment-callback-url';
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
@@ -29,7 +27,7 @@ class Opay
         if( $response['code'] == '00000'){
             return json_decode($response);
         }else{
-            throw new Exception('Something Went Wrong While trying to create cashier link!!');
+            throw new Exception('Something Went Wrong While trying to create cashier link!');
         }
     }
 
