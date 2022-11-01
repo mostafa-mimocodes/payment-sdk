@@ -33,8 +33,18 @@ class Opay
         }
     }
 
-    public function invoiceCallbackResponse($data)
+    public function getHmac($data,$secret)
     {
-        return $data;
+        $amount = $data['amount'];
+        $currency = $data['currency'];
+        $reference = $data['reference'];
+        $refunded = $data['refunded'];
+        $status = $data['status'];
+        $timeStamp = $data['timestamp'];
+        $token = $data['token'];
+        $transactionId = $data['transactionId'];
+        $txt = sprintf("{Amount:\"%s\",Currency:\"%s\",Reference:\"%s\",Refunded:%s,Status:\"%s\",Timestamp:\"%s\",Token:\"%s\",TransactionID:\"%s\"}", $amount, $currency, $reference, $refunded ? "t" : "f", $status, $timeStamp, $token, $transactionId);
+        return hash_hmac('sha3-512', ($txt), $secret);
     }
+
 }
