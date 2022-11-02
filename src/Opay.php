@@ -10,7 +10,7 @@ use Mimocodes\Payment\Controllers\PaymentController;
 
 class Opay
 {
-    public function createCashier( $data,$publicKey,$merchantId,$mode = 'test')
+    public static function createCashier( $data,$publicKey,$merchantId,$mode = 'test')
     {
 
         if($mode === 'test'){
@@ -31,7 +31,7 @@ class Opay
         }
     }
 
-    public function getHmac($data,$secret)
+    public static function getHmac($data,$secret)
     {
         $amount = $data['amount'];
         $currency = $data['currency'];
