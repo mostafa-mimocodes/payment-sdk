@@ -59,7 +59,8 @@ class Opay
     {
         $url = self::getUrl($mode);
         $url ? $url .= 'cashier/status' : null;
-        return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
+        $response = self::signDataAndSendRequest($data, $secret, $merchantId, $url);
+        return json_decode($response);
     }
 
     public static function getRefundStatus($data,$merchantId,$secret,$mode='test')
