@@ -72,6 +72,13 @@ class Opay
         return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
     }
 
+    public static function cancelPayment($data,$merchantId,$secret,$mode='test')
+    {
+        $url = self::getUrl($mode);
+        $url ? $url .= 'payment/close' : null;
+        return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
+    }
+
     private static function getUrl($mode)
     {
         return $mode === 'test' ? $url = self::SANDBOX_URL : ($mode === 'live' ? $url = self::LIVE_URL : null);
