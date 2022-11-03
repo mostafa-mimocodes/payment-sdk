@@ -18,8 +18,7 @@ class Opay
     {
         $url = self::getUrl($mode);
         $url ? $url .= 'cashier/create' : null;
-        $response = self::signDataAndSendRequest($data, $publicKey, $merchantId, $url,true);
-        return json_decode($response);
+        return self::signDataAndSendRequest($data, $publicKey, $merchantId, $url,true);
     }
 
     public static function getHmac($data,$secret): string
@@ -112,7 +111,12 @@ class Opay
         $auth = self::getSignature($data2, $secret);
         $header = ['Content-Type:application/json', 'Authorization:Bearer ' . ($cashier ? $secret : $auth), 'MerchantId:' . $merchantId];
         $response = self::http_post($url, $header, json_encode($data));
-        return $response ?: null;
+        $response = json_decode($response);
+        if($response && property_exists($response,'code') && $response->code === "00000"){
+            return $response;
+        }else{
+            throw new Exception('Something went wrong!', 500);
+        }
     }
 
 }
