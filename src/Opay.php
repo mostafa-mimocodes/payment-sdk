@@ -105,8 +105,7 @@ class Opay
         $auth = self::getSignature($data2, $secret);
         $header = ['Content-Type:application/json', 'Authorization:Bearer ' . ($cashier ? $secret : $auth), 'MerchantId:' . $merchantId];
         $response = self::http_post($url, $header, json_encode($data));
-        $result = $response ?: null;
-        return $result;
+        return $response ?: null;
     }
 
 }
