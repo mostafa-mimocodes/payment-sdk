@@ -62,6 +62,13 @@ class Opay
         return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
     }
 
+    public static function getRefundStatus($data,$merchantId,$secret,$mode='test')
+    {
+        $url = self::getUrl($mode);
+        $url ? $url .= 'payment/refund/query' : null;
+        return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
+    }
+
     public static function cancelPayment($data,$merchantId,$secret,$mode='test')
     {
         $url = self::getUrl($mode);
