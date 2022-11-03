@@ -2,8 +2,6 @@
 
 namespace Mimocodes\Payment;
 
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\URL;
 use Exception;
 
 

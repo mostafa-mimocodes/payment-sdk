@@ -11,8 +11,5 @@
             "name": "Mostafa Essam",
             "email": "me8gh210@gmail.com"
         }
-    ],
-    "require": {
-        "guzzlehttp/guzzle": "^7.0"
-    }
+    ]
 }
