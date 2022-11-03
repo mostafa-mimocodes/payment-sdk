@@ -17,19 +17,9 @@ class Opay
     public static function createCashier( $data,$publicKey,$merchantId,$mode = 'test')
     {
         $url = self::getUrl($mode);
-        $url ? $url .= 'create/cashier' : null;
+        $url ? $url .= 'cashier/create' : null;
 
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer '.$publicKey,
-            'MerchantId' => $merchantId
-        ])->post($url, $data);
-        if( $response['code'] == '00000'){
-            return json_decode($response);
-        }else{
-            throw new Exception('Something Went Wrong While trying to create cashier link!');
-        }
+        return self::signDataAndSendRequest($data, $publicKey, $merchantId, $url,true);
     }
 
     public static function getHmac($data,$secret): string
@@ -109,11 +99,11 @@ class Opay
     }
 
 
-    private static function signDataAndSendRequest($data, $secret, $merchantId, string $url)
+    private static function signDataAndSendRequest($data, $secret, $merchantId, string $url,$cashier = false)
     {
         $data2 = (string)json_encode($data, JSON_UNESCAPED_SLASHES);
         $auth = self::getSignature($data2, $secret);
-        $header = ['Content-Type:application/json', 'Authorization:Bearer ' . $auth, 'MerchantId:' . $merchantId];
+        $header = ['Content-Type:application/json', 'Authorization:Bearer ' . $cashier ? $secret :$auth, 'MerchantId:' . $merchantId];
         $response = self::http_post($url, $header, json_encode($data));
         $result = $response ?: null;
         return $result;
