@@ -5,19 +5,20 @@ namespace Mimocodes\Payment;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\URL;
 use Exception;
-use Mimocodes\Payment\Controllers\PaymentController;
 
 
 class Opay
 {
+
+    private const SANDBOX_URL = 'https://sandboxapi.opaycheckout.com/api/v1/international/';
+    private const LIVE_URL = 'https://api.opaycheckout.com/api/v1/international/';
+
+
     public static function createCashier( $data,$publicKey,$merchantId,$mode = 'test')
     {
+        $url = self::getUrl($mode);
+        $url ? $url .= 'create/cashier' : null;
 
-        if($mode === 'test'){
-            $url = 'https://sandboxapi.opaycheckout.com/api/v1/international/cashier/create';
-        }elseif ($mode === 'live'){
-            $url = 'https://api.opaycheckout.com/api/v1/international/cashier/create';
-        }
         $response = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
@@ -55,21 +56,25 @@ class Opay
     public static function refund($data,$merchantId,$secret,$mode='test')
     {
 
-        if($mode === 'test'){
-            $url = 'https://sandboxapi.opaycheckout.com/api/v1/international/payment/refund/create';
-        }elseif ($mode === 'live'){
-            $url = 'https://api.opaycheckout.com/api/v1/international/payment/refund/create';
-        }
+        $url = self::getUrl($mode);
+        $url ? $url .= 'payment/refund/create' : null;
 
         ksort($data);
 
-        $data2 = (string) json_encode($data,JSON_UNESCAPED_SLASHES);
-        $auth = Opay::getSignature($data2,$secret);
-        $header = ['Content-Type:application/json', 'Authorization:Bearer '. $auth, 'MerchantId:'.$merchantId];
-        $response = Opay::http_post($url, $header, json_encode($data));
-        $result = $response?:null;
-        return $result;
+        return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
 
+    }
+
+    public static function getPaymentStatus($data,$merchantId,$secret,$mode='test')
+    {
+        $url = self::getUrl($mode);
+        $url ? $url .= 'cashier/status' : null;
+        return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
+    }
+
+    private static function getUrl($mode)
+    {
+        return $mode === 'test' ? $url = self::SANDBOX_URL : ($mode === 'live' ? $url = self::LIVE_URL : null);
     }
 
     private static function http_post ($url, $header, $data) {
@@ -94,6 +99,17 @@ class Opay
             print_r("invalid httpstatus:{$httpStatusCode} ,response:$response,detail_error:" . $error, $httpStatusCode);
         }
         return $response;
+    }
+
+
+    private static function signDataAndSendRequest($data, $secret, $merchantId, string $url)
+    {
+        $data2 = (string)json_encode($data, JSON_UNESCAPED_SLASHES);
+        $auth = self::getSignature($data2, $secret);
+        $header = ['Content-Type:application/json', 'Authorization:Bearer ' . $auth, 'MerchantId:' . $merchantId];
+        $response = self::http_post($url, $header, json_encode($data));
+        $result = $response ?: null;
+        return $result;
     }
 
 }
