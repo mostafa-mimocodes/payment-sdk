@@ -103,7 +103,7 @@ class Opay
     {
         $data2 = (string)json_encode($data, JSON_UNESCAPED_SLASHES);
         $auth = self::getSignature($data2, $secret);
-        $header = ['Content-Type:application/json', 'Authorization:Bearer ' . $cashier ? $secret :$auth, 'MerchantId:' . $merchantId];
+        $header = ['Content-Type:application/json', 'Authorization:Bearer ' . ($cashier ? $secret : $auth), 'MerchantId:' . $merchantId];
         $response = self::http_post($url, $header, json_encode($data));
         $result = $response ?: null;
         return $result;
