@@ -18,8 +18,8 @@ class Opay
     {
         $url = self::getUrl($mode);
         $url ? $url .= 'cashier/create' : null;
-
-        return self::signDataAndSendRequest($data, $publicKey, $merchantId, $url,true);
+        $response = self::signDataAndSendRequest($data, $publicKey, $merchantId, $url,true);
+        return json_decode($response);
     }
 
     public static function getHmac($data,$secret): string
@@ -59,8 +59,7 @@ class Opay
     {
         $url = self::getUrl($mode);
         $url ? $url .= 'cashier/status' : null;
-        $response = self::signDataAndSendRequest($data, $secret, $merchantId, $url);
-        return json_decode($response);
+        return self::signDataAndSendRequest($data, $secret, $merchantId, $url);
     }
 
     public static function getRefundStatus($data,$merchantId,$secret,$mode='test')
