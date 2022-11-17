@@ -8,8 +8,8 @@ use Exception;
 class Opay
 {
 
-    private const SANDBOX_URL = 'https://sandboxapi.opaycheckout.com/api/v1/international/';
-    private const LIVE_URL = 'https://api.opaycheckout.com/api/v1/international/';
+    const SANDBOX_URL = 'https://sandboxapi.opaycheckout.com/api/v1/international/';
+    const LIVE_URL = 'https://api.opaycheckout.com/api/v1/international/';
 
 
     public static function createCashier( $data,$publicKey,$merchantId,$mode = 'test')
@@ -109,12 +109,7 @@ class Opay
         $auth = self::getSignature($data2, $secret);
         $header = ['Content-Type:application/json', 'Authorization:Bearer ' . ($cashier ? $secret : $auth), 'MerchantId:' . $merchantId];
         $response = self::http_post($url, $header, json_encode($data));
-        $response = json_decode($response);
-        if($response && property_exists($response,'code') && $response->code === "00000"){
-            return $response;
-        }else{
-            throw new Exception('Something went wrong!', 500);
-        }
+        return json_decode($response);
     }
 
 }
